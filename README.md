@@ -1,5 +1,9 @@
-# The homepage for barth.tech
+# barth.tech Website
 
+# Cloning
+```
+git clone --recurse-submodules git@github.com:r-bar/barth-tech.git
+```
 
 # Build
 
