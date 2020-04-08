@@ -1,0 +1,32 @@
+{% extends "hyde/templates/page.html" %}
+
+{% block title %}{{ config.title }} - {{ page.title }}{% endblock title %}
+
+{% block sidebar_about %}
+<div class="sidebar-about">
+  <a href="{{ config.base_url }}"><h1>{{ config.title }}</h1></a>
+  {% if config.description %}
+  <p class="lead">{{config.description}}</p>
+  {% endif %}
+  <h2>{{ page.title }}</h2>
+</div>
+{% endblock sidebar_about %}
+
+{% block sidebar_toc %}
+  <ul class="sidebar-toc">
+    {% for h1 in page.toc %}
+      <li>
+        <a href="{{h1.permalink | safe}}">{{ h1.title }}</a>
+        {% if h1.children %}
+          <ul>
+            {% for h2 in h1.children %}
+              <li>
+                <a href="{{h2.permalink | safe}}">{{ h2.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock sidebar_toc %}
