@@ -1,4 +1,4 @@
-{% extends "hyde/templates/page.html" %}
+{% extends "index.html" %}
 
 {% block title %}{{ config.title }} - {{ page.title }}{% endblock title %}
 
@@ -8,8 +8,8 @@
   {% if config.description %}
   <p class="lead">{{config.description}}</p>
   {% endif %}
-  <h2>{{ page.title }}</h2>
 </div>
+<h2>{{ page.title }}</h2>
 {% endblock sidebar_about %}
 
 {% block sidebar_toc %}
@@ -30,3 +30,12 @@
     {% endfor %}
   </ul>
 {% endblock sidebar_toc %}
+
+{% block content %}
+<div class="post">
+  <h1 class="post-title">{{ page.title }}</h1>
+  <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
+  {{ page.content | safe }}
+</div>
+<div id="search-target"></div>
+{% endblock content %}

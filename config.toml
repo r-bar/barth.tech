@@ -18,6 +18,7 @@ title = "Ryan Barth"
 [extra]
 # Put all your custom variables here
 debug = false
+hyde_sticky = false
 #hyde_links = [
 #    {url = "/", name = "Home"},
 #    {url = "/resume", name = "Resume"},

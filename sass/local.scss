@@ -1,5 +1,73 @@
-.sidebar-about {
+.container {
+  position: relative;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
   h1, h2, h3, h4, h5, h6 {
     color: #FFF;
   }
+
+  ul {
+    // normally 2rem
+    padding-left: 1rem;
+  }
+}
+
+.term-highlight {
+  background-color: yellow;
+}
+
+.sidebar-toc {
+  text-align: left;
+}
+
+#search-box {
+  margin: 1rem 0rem;
+  input {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.0);
+    border: 0;
+    border-bottom: 3px solid #999;
+    padding: 0.3rem;
+    display: block;
+    font-size: 20px;
+  }
+  input:focus {
+    border-bottom: 3px solid #FFF;
+  }
+}
+
+#search-target {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.search-results {
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  //z-index: 1;
+}
+
+.spacer {
+  flex-grow: 1;
+  min-height: 1rem;
+}
+
+// mobile -- breakpoint taken from hyde.css
+@media (max-width: 48em) {
+  .sidebar {
+    align-items: center;
+  }
+}
+
+.hidden {
+  display: none;
 }

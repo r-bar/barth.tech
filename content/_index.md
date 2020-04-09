@@ -1,5 +1,4 @@
 +++
-title = "Ryan Barth"
 description = "Homepage of a giant nerd"
 +++
 Hello and welcome! I'm Ryan. I build things on the web professionally.  I enjoy
