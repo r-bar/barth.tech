@@ -5,11 +5,11 @@ description = "Ryan Barth"
 +++
 # Work History
 
-## Senior Bakcend Engineer at FanAI
+## Senior Backend Engineer at FanAI
 Mar 2018 - Mar 2020 in Santa Monica, California
 
-As a Senior Software Engineer at FanAI I architected and implemented ETLs and
-APIs for our self service data analytics platform.
+As a Senior Software Engineer at FanAI I architected and implemented ETL
+pipelines and API services for our self service data analytics platform.
 
 **Projects:**
 * The authorization platform for ensuring the isolation, security, and anominity of audience data
