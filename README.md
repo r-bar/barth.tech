@@ -1,6 +1,11 @@
 # Static Personal Website at barth.tech
 ![CD](https://github.com/r-bar/barth.tech/workflows/CD/badge.svg)
 
+## Get the Code
+```
+git checkout --recursive git@github.com:r-bar/barth.tech.git
+```
+
 ## Building
 ### Requirements
 * [Zola](https://github.com/getzola/zola)
