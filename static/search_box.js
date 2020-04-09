@@ -73,6 +73,11 @@ class SearchResults {
   oninit(vnode) {
     this.index = elasticlunr.Index.load(window.searchIndex);
   }
+  onupdate(vnode) {
+    const target = document.querySelector('.search-results');
+    const rect = target.getBoundingClientRect();
+    window.scroll(rect.left, rect.top);
+  }
   view(vnode) {
     var query;
     try {
@@ -113,7 +118,6 @@ const Search = initVnode => {
     view: () => {
       return m("input", {
         placeholder: "Search site...",
-        oninput: onsearch,
         onchange: onsearch,
         value: query,
       });
