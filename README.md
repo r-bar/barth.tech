@@ -3,7 +3,7 @@
 
 ## Get the Code
 ```
-git checkout --recursive git@github.com:r-bar/barth.tech.git
+git clone --recursive git@github.com:r-bar/barth.tech.git
 ```
 
 ## Building
