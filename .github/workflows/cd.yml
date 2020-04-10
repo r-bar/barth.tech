@@ -41,12 +41,13 @@ jobs:
         tar xfz zola-v0.10.1-x86_64-unknown-linux-gnu.tar.gz
 
     - name: Build
-      run: ./zola build --base-url www.barth.tech
+      run: ./zola build
     
     - name: Create id_rsa
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_ID_RSA }}" > ~/.ssh/id_rsa
+        ssh-keyscan ${{ secrets.SSH_DOMAIN }} 2&>1 | grep -ve "^#" >> ~/.ssh/known_hosts
 
     - name: Upload to Server
-      run: rsync -rav --delete public/ ${{ secrets.SSH_TARGET }}:/var/www/barth.tech/
+      run: rsync -rav --delete public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_DOMAIN }}:/var/www/barth.tech/
