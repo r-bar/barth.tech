@@ -43,13 +43,11 @@ jobs:
 
     - name: Build
       run: ./zola build
-
-    - name: Create id_rsa
-      run: |
-        set -e
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_ID_RSA }}" > ~/.ssh/id_rsa
-        ssh-keyscan ${{ secrets.SSH_DOMAIN }} 2&>1 | grep -ve "^#" >> ~/.ssh/known_hosts
-
-    - name: Upload to Server
-      run: rsync -rav --delete public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_DOMAIN }}:/var/www/barth.tech/
+      
+    - name: Deploy to server
+      uses: Pendect/action-rsyncer@v1.1.0
+      env:
+        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }} 
+      with:
+        src: public
+        dest: ${{ secrets.SSH_USER }}@${{ secrets.SSH_DOMAIN }}:/var/www/barth.tech/
