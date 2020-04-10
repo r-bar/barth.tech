@@ -34,10 +34,13 @@ Oct 2017 - Mar 2018 in Los Angeles, California
 
 **Projects:**
 
-* To date have completed overhaul of their Ruby based backend system. Goes Live 10/22.
-* New backend acts as a batch processing + caching layer in front of a heavily rate limited, business critical, 3rd party API
+* To date have completed overhaul of their Ruby based backend system. Goes Live
+  10/22.
+* New backend acts as a batch processing + caching layer in front of a heavily
+  rate limited, business critical, 3rd party API
 * Dramatically increased site responsiveness
-* Worked closely with front end and marketing teams to plan new features for December launch
+* Worked closely with front end and marketing teams to plan new features for
+  December launch
 * Implemented new CI and testing infrastructure
 * Automation of new product rollout and publishing
 
