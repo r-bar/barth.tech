@@ -4,7 +4,6 @@ RUN apt-get update && apt-get install -y libssl1.1
 RUN mkdir /app
 WORKDIR /app
 ADD https://github.com/getzola/zola/releases/download/v${ZOLA_VERSION}/zola-v${ZOLA_VERSION}-x86_64-unknown-linux-gnu.tar.gz ./
-#RUN wget https://github.com/getzola/zola/releases/download/v${ZOLA_VERSION}/zola-v${ZOLA_VERSION}-x86_64-unknown-linux-gnu.tar.gz
 RUN tar xfz zola-v${ZOLA_VERSION}-x86_64-unknown-linux-gnu.tar.gz
 COPY . .
 RUN ./zola build
