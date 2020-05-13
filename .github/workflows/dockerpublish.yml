@@ -26,6 +26,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Clone submodules
+        run: |
+          git submodule update --recursive --init
+
       - name: Run tests
         run: |
           docker build . --file Dockerfile
