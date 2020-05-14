@@ -15,11 +15,9 @@ env:
 jobs:
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
-  push:
+  image:
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-
     steps:
       - uses: actions/checkout@v2
 
@@ -56,7 +54,7 @@ jobs:
           docker push $IMAGE_ID:$SHA
 
   deploy:
-    needs: push
+    needs: image
     name: deploy to cluster
     runs-on: ubuntu-latest
     steps:
@@ -67,7 +65,7 @@ jobs:
         helm: helm3
         release: barth-tech
         namespace: default
-        chart: barth-tech
+        chart: ./helm-chart/barth-tech
         token: '${{ github.token }}'
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
