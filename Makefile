@@ -4,6 +4,7 @@ DATE_VERSION = $(shell date +%F-%k%M%S)
 deploy: helm-chart/barth-tech/Chart.yaml VERSION
 	git commit -m 'tag version $(shell cat VERSION)' $^
 	git tag $(shell cat VERSION)
+	git push
 	git push origin $(shell cat VERSION)
 
 .PHONY: VERSION
