@@ -61,9 +61,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: deploy to cluster
+    - name: helm install
       uses: deliverybot/helm@v1
       with:
+        helm: helm3
         release: barth-tech
         namespace: default
         chart: barth-tech
