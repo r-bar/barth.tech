@@ -27,7 +27,7 @@ jobs:
         run: git submodule update --init --recursive
 
       - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_ID
+        run: docker build . --file Dockerfile --tag $IMAGE_ID:latest
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
@@ -35,7 +35,7 @@ jobs:
       - name: Push image
         run: |
           #SHA=$(git rev-parse --short HEAD)
-          SHA=${{ github.sha }}
+          SHA="$(git rev-parse --short HEAD)"
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
@@ -43,17 +43,16 @@ jobs:
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
 
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
           echo SHA=$SHA
 
-          docker tag image $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:latest
+
+          docker tag $IMAGE_ID:latest $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
-          docker tag image $IMAGE_ID:$SHA
+          docker tag $IMAGE_ID:latest $IMAGE_ID:$SHA
           docker push $IMAGE_ID:$SHA
 
   deploy:
