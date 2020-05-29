@@ -10,3 +10,4 @@ RUN ./zola build
 
 FROM nginx:alpine
 COPY --from=0 /app/public/ /var/www/
+COPY nginx.conf /etc/nginx/conf.d/default.conf
