@@ -1,4 +1,4 @@
-DATE_VERSION = $(shell date +%F-%k%M%S)
+DATE_VERSION = $(shell date +%F-%H%M%S)
 
 .PHONY: deploy
 deploy: helm-chart/barth-tech/Chart.yaml VERSION
