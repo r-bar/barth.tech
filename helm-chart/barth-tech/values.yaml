@@ -45,10 +45,13 @@ ingress:
   hosts:
     - host: barth.tech
       paths: ['/']
+    - host: www.barth.tech
+      paths: ['/']
   tls:
     - secretName: tls-barth.tech
       hosts:
         - barth.tech
+        - www.barth.tech
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
