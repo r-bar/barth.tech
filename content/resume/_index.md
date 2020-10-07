@@ -12,10 +12,14 @@ As a Senior Software Engineer at FanAI I architected and implemented ETL
 pipelines and API services for our self service data analytics platform.
 
 **Projects:**
-* The authorization platform for ensuring the isolation, security, and anominity of audience data
-* The design and implementation of an ETL service for extracting and summarizing top Twitch streams in real time
-* The development of numerous validation and delayed processing frameworks used throughout FanAI
-* The social graph database used for determining optimal sponsorship opportunities for our customers
+* The authorization platform for ensuring the isolation, security, and anominity
+  of audience data
+* The design and implementation of an ETL service for extracting and summarizing
+  top Twitch streams in real time
+* The development of numerous validation and delayed processing frameworks used
+  throughout FanAI
+* The social graph database used for determining optimal sponsorship
+  opportunities for our customers
 
 **Tech Used:**
 * Python
@@ -30,12 +34,14 @@ pipelines and API services for our self service data analytics platform.
 ## Software Developer at FAM Brands
 Oct 2017 - Mar 2018 in Los Angeles, California
 
-3 month contract from mid September to January.
+Originally a 3 month contract from mid September to January. The goal was to get
+their warehouse inventory system to talk to their web store before the holiday
+rush.
 
 **Projects:**
 
-* To date have completed overhaul of their Ruby based backend system. Goes Live
-  10/22.
+* Completed overhaul of their Ruby based backend system to scale for Holiday
+  shopping traffic spikes
 * New backend acts as a batch processing + caching layer in front of a heavily
   rate limited, business critical, 3rd party API
 * Dramatically increased site responsiveness
