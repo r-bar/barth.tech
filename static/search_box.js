@@ -69,56 +69,76 @@ class ResultEntry {
 }
 
 
-class SearchResults {
-  oninit(vnode) {
-    this.index = elasticlunr.Index.load(window.searchIndex);
-  }
-  onupdate(vnode) {
-    const target = document.querySelector('.search-results');
-    const rect = target.getBoundingClientRect();
-    window.scroll(rect.left, rect.top);
-  }
-  view(vnode) {
-    var query;
-    try {
-      query = vnode.attrs.query;
-    } catch (error) {}
+const SearchResults = () => {
+  const index = elasticlunr.Index.load(window.searchIndex);
 
-    let classes = ['search-results'];
-    if (!query) {
-      classes.push('hidden');
-      return m('div', {'class': classes.join(' ')})
+  const close = () => {
+    window.location.hash = '!/';
+  };
+
+  return {
+    onupdate: vnode => {
+      hidden = !Boolean(vnode.attrs.query);
+      if (vnode.attrs.query) {
+        const rect = vnode.dom.getBoundingClientRect();
+        window.scroll(rect.left, rect.top);
+      }
+    },
+
+    view: (vnode) => {
+      let query = vnode.attrs.query;
+      let classes = ['search-results'];
+      if (!query)
+        classes.push('hidden');
+
+      const results = index.search(query);
+      const entries = results.map(result =>
+        m(ResultEntry, {highlight: query, ...result}));
+      return m('div', {'class': classes.join(' ')}, [
+        m('h1', `Search results for "${query}"`),
+        m('span', {onclick: close, class: "close"}, '✖'),
+        ...entries,
+      ]);
     }
-    const results = this.index.search(query);
-    const entries = results.map(result =>
-      m(ResultEntry, {highlight: query, ...result}));
-    return m('div', {'class': classes.join(' ')}, [
-      m('h1', `Search results for "${query}"`),
-      ...entries,
-    ]);
+
   }
 }
 
 
 const Search = initVnode => {
-  var query = '';
-  try {
-    query = initVnode.attrs.value;
-  } catch (error) {}
+  var query = initVnode.attrs.value || '';
+  const searchTarget = document.querySelector(initVnode.attrs.target);
+  if (!searchTarget) {
+    throw "target attribute required for Search";
+  }
 
   const setSearch = newQuery => {
     query = newQuery;
-    window.location.hash = `!/query=${query}`
+    if (query) {
+      window.location.hash = `!/query=${query}`
+    } else {
+      window.location.hash = `!/`
+    }
   };
 
-  const onsearch = event =>
-    setSearch(event.target.value);
-
   return {
-    view: () => {
+    onupdate: vnode => {
+      setSearch(vnode.attrs.value);
+    },
+    view: (vnode) => {
+      setSearch(vnode.attrs.value);
+
+      if (searchTarget) {
+        m.render(searchTarget, m(SearchResults, {query}));
+      }
+
+      if (query != vnode.attrs.value) {
+        console.log('query mismatch', query, vnode.attrs.value)
+      }
+
       return m("input", {
         placeholder: "Search site...",
-        onchange: onsearch,
+        onchange: event => setSearch(event.target.value),
         value: query,
       });
     },
@@ -127,18 +147,11 @@ const Search = initVnode => {
 
 
 document.addEventListener('DOMContentLoaded', evt => {
-  // This is an ugly workaround because mithril does not allow calling m.route
-  // multiple times. I would prefer to just use mithril to orchestrate the routes
-  let query = '';
-  try {
-    query = window.location.hash.match(/query=(.*)/)[1]
-  } catch (e) {}
   const searchBox = document.getElementById('search-box');
-  m.render(searchBox, m(Search, {value: query}))
+  //m.render(searchBox, m(Search, {value: query}))
 
-  const searchTarget = document.getElementById('search-target')
-  m.route(searchTarget, '', {
-    '/': SearchResults,
-    '/query=:query': SearchResults,
+  m.route(searchBox, '', {
+    '/': {render: vnode => m(Search, {value: vnode.attrs.value, target: '#search-target'})},
+    '/query=:value': {render: vnode => m(Search, {value: vnode.attrs.value, target: '#search-target'})},
   });
 });
