@@ -26,6 +26,7 @@ hyde_sticky = false
 #]
 
 sidebar_links = [
+    {url = "/calendar", name = "Calendar"},
     {url = "/resume", name = "Resume"},
     {url = "/blog", name = "Blog Posts"},
     {url = "https://linkedin.com/in/ryan-barth-tech", name = "LinkedIn"},
