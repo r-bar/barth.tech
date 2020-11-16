@@ -15,9 +15,9 @@ Jack is pretty good at letting you know when he is hungry. When he is not happy
 feeding him is generally the first thing to try.
 
 * No known allergies
-* Formula goes bad very quickly. It cannot be out unrefrigerated for more than
-  2 hours and cannot last in the fridge more than 48 hours. Expired formula
-  should be dumped.
+* Formula goes bad very quickly. It cannot be opened and unrefrigerated for more
+  than 2 hours, this includes being in the bottle. It cannot last in the fridge
+  more than 48 hours. Expired formula should be dumped.
 * During the day he will generally eat every 2-3 hours
 * Jack is starting to eat solid foods. Currently he can eat pureed vegetables
   and single grain cereal (rice or oatmeal).
