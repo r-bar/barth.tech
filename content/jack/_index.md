@@ -5,6 +5,11 @@ description = "Jack Barth"
 +++
 Last Updated: 2020-11-16
 
+# COVID-19 and Hygiene
+* Please wash hands after returning from outside, before touching Jack.
+* Avoid crowded places
+* No kissing
+
 # Feeding
 Jack is pretty good at letting you know when he is hungry. When he is not happy
 feeding him is generally the first thing to try.
@@ -50,7 +55,3 @@ feeding him is generally the first thing to try.
   irritation of the glans.
 * Jack currently (11/2020) wears size 3 diapers
 * Do not leave him on top of the changing table unattended
-
-# COVID-19
-* Please wash hands after returning from outside, before touching Jack.
-* Avoid crowded places
