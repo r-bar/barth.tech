@@ -1,5 +1,6 @@
 +++
 description = "Homepage of a giant nerd"
+template = "section.html"
 +++
 Hello and welcome! I'm Ryan. I build things on the web professionally.  I enjoy
 cracking tough problems and working with brilliant people. I love my wife,

@@ -2,16 +2,6 @@
 
 {% block title %}{{ config.title }} - {{ page.title }}{% endblock title %}
 
-{% block sidebar_about %}
-<div class="sidebar-about">
-  <a href="{{ config.base_url }}"><h1>{{ config.title }}</h1></a>
-  {% if config.description %}
-  <p class="lead">{{config.description}}</p>
-  {% endif %}
-</div>
-<a href="#"><h2>{{ page.title }}</h2></a>
-{% endblock sidebar_about %}
-
 {% block sidebar_toc %}
   <ul class="sidebar-toc">
     {% for h1 in page.toc %}

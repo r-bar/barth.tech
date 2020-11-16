@@ -33,4 +33,5 @@ sidebar_links = [
     {url = "https://github.com/r-bar", name = "Github"},
 ]
 
+# enable building a table of contents for pages
 toc_enabled = true
