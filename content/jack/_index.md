@@ -90,3 +90,14 @@ reset it.
   irritation of the glans.
 * Jack currently (11/2020) wears size 3 diapers
 * Do not leave him on top of the changing table unattended
+
+# Handling
+* When lifting under the armpits make sure the majority of his weight is
+  supported by your grip on his chest. Lifting by the armpits can cause
+  dislocations.
+* Do not lift or swing by hands or forearms. He can pull himself up to a
+  standing position by his arms, but it needs to be primarily by his own
+  strength.
+* Jack is still not stable sitting, do not leave him to fall on his face.
+* Jack can "army crawl" do not leave anything smaller than a baseball near him.
+  It will end up in his mouth and choke him.
