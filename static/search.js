@@ -72,86 +72,31 @@ class ResultEntry {
 const SearchResults = () => {
   const index = elasticlunr.Index.load(window.searchIndex);
 
-  const close = () => {
-    window.location.hash = '!/';
-  };
-
   return {
-    onupdate: vnode => {
-      hidden = !Boolean(vnode.attrs.query);
-      if (vnode.attrs.query) {
-        const rect = vnode.dom.getBoundingClientRect();
-        window.scroll(rect.left, rect.top);
-      }
-    },
-
     view: (vnode) => {
-      let query = vnode.attrs.query;
       let classes = ['search-results'];
-      if (!query)
-        classes.push('hidden');
-
-      const results = index.search(query);
-      const entries = results.map(result =>
-        m(ResultEntry, {highlight: query, ...result}));
-      return m('div', {'class': classes.join(' ')}, [
-        m('h1', `Search results for "${query}"`),
-        m('span', {onclick: close, class: "close"}, '✖'),
-        ...entries,
-      ]);
+      let query = vnode.attrs.query;
+      let results = index.search(query);
+      let resultContent = [m('h1', `Search results for "${query}"`)];
+      if (results.length) {
+        resultContent.push(...results.map(result =>
+          m(ResultEntry, {highlight: query, ...result})));
+      } else {
+        resultContent.push(m('p', 'No results found.'));
+      }
+      return m('div', {'class': classes.join(' ')}, resultContent);
     }
-
   }
 }
 
 
-const Search = initVnode => {
-  var query = initVnode.attrs.value || '';
-  const searchTarget = document.querySelector(initVnode.attrs.target);
-  if (!searchTarget) {
-    throw "target attribute required for Search";
+document.addEventListener('DOMContentLoaded', _evt => {
+  const searchResultsTarget = document.getElementById('search-results');
+  const url = new URL(window.location.href)
+  const query = url.searchParams.get('q')
+
+  if (searchResultsTarget && query) {
+    m.render(searchResultsTarget, m(SearchResults, {query}));
   }
 
-  const setSearch = newQuery => {
-    query = newQuery;
-    if (query) {
-      window.location.hash = `!/query=${query}`
-    } else {
-      window.location.hash = `!/`
-    }
-  };
-
-  return {
-    onupdate: vnode => {
-      setSearch(vnode.attrs.value);
-    },
-    view: (vnode) => {
-      setSearch(vnode.attrs.value);
-
-      if (searchTarget) {
-        m.render(searchTarget, m(SearchResults, {query}));
-      }
-
-      if (query != vnode.attrs.value) {
-        console.log('query mismatch', query, vnode.attrs.value)
-      }
-
-      return m("input", {
-        placeholder: "Search site...",
-        onchange: event => setSearch(event.target.value),
-        value: query,
-      });
-    },
-  }
-};
-
-
-document.addEventListener('DOMContentLoaded', evt => {
-  const searchBox = document.getElementById('search-box');
-  //m.render(searchBox, m(Search, {value: query}))
-
-  m.route(searchBox, '', {
-    '/': {render: vnode => m(Search, {value: vnode.attrs.value, target: '#search-target'})},
-    '/query=:value': {render: vnode => m(Search, {value: vnode.attrs.value, target: '#search-target'})},
-  });
 });

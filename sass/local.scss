@@ -25,20 +25,18 @@
   text-align: left;
 }
 
-#search-box {
+input#search-box {
   margin: 1rem 0rem;
-  input {
-    color: white;
-    background-color: rgba(0, 0, 0, 0.0);
-    border: 0;
-    border-bottom: 3px solid #999;
-    padding: 0.3rem;
-    display: block;
-    font-size: 20px;
-  }
-  input:focus {
-    border-bottom: 3px solid #FFF;
-  }
+  color: white;
+  background-color: rgba(0, 0, 0, 0.0);
+  border: 0;
+  border-bottom: 3px solid #999;
+  padding: 0.3rem;
+  display: block;
+  font-size: 20px;
+}
+input#search-box:focus {
+  border-bottom: 3px solid #FFF;
 }
 
 #search-target {
