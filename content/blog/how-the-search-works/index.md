@@ -10,12 +10,10 @@ tags = ["search"]
 +++
 
 [Zola](https://www.getzola.org/) is an awesome static site generator written in
-Rust. Zola you can render a statically generated search index file. But that is
-it! That is all it gives you! It is up to you to display the search results on
-your site. Here I am offering a dead simple solution that should work for most
-sites and templates. I am currently using the well supported
-[Hyde](https://github.com/getzola/hyde) theme for Zola until inspiration (or
-boredom) strikes.
+Rust. With Zola you can render a statically generated search index file, but
+that is it! That is all it gives you to search your site! It is up to you to display the search
+results. Here I am offering a dead simple solution that should work
+for most Zola sites and templates.
 
 In this article I will attempt to use this blog's simple article search feature
 to show you a few things about design choices, full text search techniques, and
