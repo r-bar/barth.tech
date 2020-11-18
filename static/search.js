@@ -92,11 +92,10 @@ const SearchResults = () => {
 
 document.addEventListener('DOMContentLoaded', _evt => {
   const searchResultsTarget = document.getElementById('search-results');
-  const url = new URL(window.location.href)
-  const query = url.searchParams.get('q')
+  const url = new URL(window.location.href);
+  const query = url.searchParams.get('q');
 
   if (searchResultsTarget && query) {
     m.render(searchResultsTarget, m(SearchResults, {query}));
   }
-
 });
