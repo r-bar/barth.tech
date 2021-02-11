@@ -1,4 +1,8 @@
-DATE_VERSION = $(shell date +%F-%H%M%S)
+DATE_VERSION := $(shell date +%F-%H%M%S)
+MITHRIL_VERSION := v2.0.4
+SOURCE_FILES = $(wildcard sass/** content/** static/** templates/** themes/** config.toml)
+FONTS_URL := "https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
+IMAGE_NAME := barth.tech
 
 .DEFAULT: help
 .PHONY: help
@@ -19,3 +23,24 @@ VERSION:
 helm-chart/barth-tech/Chart.yaml: VERSION
 	sed -i 's/appVersion: .*/appVersion: $(shell cat VERSION)/' $@
 
+static/vendor/mithril.min.js:
+	wget https://github.com/MithrilJS/mithril.js/releases/download/${MITHRIL_VERSION}/mithril.min.js -P static/vendor
+
+static/vendor/fonts:
+	./bin/gfonts.py ${FONTS_URL} $@
+
+.PHONY: build
+public: build
+build: ${SOURCE_FILES} static/vendor/fonts static/vendor/mithril.min.js ## Build the site
+	zola build
+
+.PHONY: image
+image: VERSION ## Build and tag docker image
+	docker build . \
+		-t ${IMAGE_NAME}:$(shell cat VERSION) \
+		-t ${IMAGE_NAME}:latest
+
+
+clean: ## Clean generated files
+	-rm -r static/vendor/*
+	-rm -r public
