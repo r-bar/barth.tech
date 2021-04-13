@@ -9,7 +9,7 @@ image:
   pullPolicy: IfNotPresent
 
 imagePullSecrets:
-  - name: github-registry
+  - name: docker.pkg.github.com-registry
 nameOverride: ""
 fullnameOverride: ""
 
