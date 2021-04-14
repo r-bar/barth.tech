@@ -8,8 +8,7 @@ image:
   repository: docker.pkg.github.com/r-bar/barth.tech/image
   pullPolicy: IfNotPresent
 
-imagePullSecrets:
-  - name: docker.pkg.github.com-registry
+imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 

@@ -67,5 +67,9 @@ jobs:
           namespace: default
           chart: ./helm-chart/barth-tech
           token: '${{ github.token }}'
+          values: |
+            imagePullSecrets:
+              - ghcr.io-registry
+              - docker.pkg.github.com-registry
         env:
           KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
