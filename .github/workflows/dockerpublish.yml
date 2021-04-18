@@ -10,7 +10,7 @@ on:
 env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: image
-  IMAGE_ID: docker.pkg.github.com/${{ github.repository }}/image
+  IMAGE_ID: registry.barth.tech/library/barth.tech
 
 jobs:
   # Push image to GitHub Packages.
@@ -28,7 +28,7 @@ jobs:
         run: docker build . --file Dockerfile --tag $IMAGE_ID:latest
 
       - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login registry.barth.tech -u ${{ secrets.DOCKER_USER }} --password-stdin
 
       - name: Push image
         run: |
@@ -67,9 +67,9 @@ jobs:
           namespace: default
           chart: ./helm-chart/barth-tech
           token: '${{ github.token }}'
-          values: |
-            imagePullSecrets:
-              - name: ghcr.io-registry
-              - name: docker.pkg.github.com-registry
+          #values: |
+          #  imagePullSecrets:
+          #    - name: ghcr.io-registry
+          #    - name: docker.pkg.github.com-registry
         env:
           KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
