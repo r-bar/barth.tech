@@ -6,6 +6,11 @@
 git clone --recursive git@github.com:r-bar/barth.tech.git
 ```
 
+## Updating submodules for existing repo
+```
+git submodule update
+```
+
 ## Building
 ### Requirements
 * [Zola](https://github.com/getzola/zola)

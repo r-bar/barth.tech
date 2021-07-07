@@ -79,3 +79,24 @@ input#search-box:focus {
 .hidden {
   display: none;
 }
+
+.post {
+  //h1, h2, h3, h4, h5, h6 {
+  //  > a.zola-anchor {
+  //    //float: right;
+  //    display: none;
+  //  }
+  //}
+  //h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
+  //  > a.zola-anchor {
+  //    display: inline;
+  //  }
+  //}
+}
+
+@media only screen and (min-width: 48em) {
+  .content {
+    // required for 80 character wide code samples
+    max-width: 43rem;
+  }
+}
