@@ -3,6 +3,7 @@ MITHRIL_VERSION := v2.0.4
 SOURCE_FILES = $(wildcard sass/** content/** static/** templates/** themes/** config.toml)
 FONTS_URL := "https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
 IMAGE_NAME := barth.tech
+CONTAINER_RUNTIME ?= docker
 
 
 .DEFAULT: help
@@ -44,7 +45,7 @@ build: ${SOURCE_FILES} static/vendor/fonts static/vendor/mithril.min.js ## Build
 
 .PHONY: image
 image: VERSION ## Build and tag docker image
-	docker build . \
+	${CONTAINER_RUNTIME} build . \
 		-t ${IMAGE_NAME}:$(shell cat VERSION) \
 		-t ${IMAGE_NAME}:latest
 

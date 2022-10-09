@@ -45,7 +45,7 @@
 
 {%- if section.pages -%}
 <div class="posts">
-  {% for page in section.pages | reverse %}
+  {% for page in section.pages %}
     <div class="post">
       <a href="{{ page.permalink }}">
         <h1 class="post-title">
