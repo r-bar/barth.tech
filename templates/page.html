@@ -19,6 +19,17 @@
       </li>
     {% endfor %}
   </ul>
+  <div class="spacer"></div>
+  <div class="taxonomies">
+    {% for taxonomy, values in page.taxonomies %}
+      <a href="/{{ taxonomy }}"><h3>{{ taxonomy }}</h3></a>
+      <div>
+      {% for value in values %}
+        <a href="/{{ taxonomy }}/{{ value }}/" class="tag">{{ value }}</a>
+      {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
 {% endblock sidebar_toc %}
 
 {% block content %}

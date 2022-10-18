@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+
+{% block content %}
+  <h1>Tag: {{ term.name }}</h1>
+  <hr/>
+  <div class="posts">
+    {% for page in term.pages %}
+      <div class="post">
+        <a href="{{ page.permalink }}">
+          <h2 class="post-title">
+            {{ page.title }}
+          </h2>
+          <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
+        </a>
+        <div class="post-summary">
+          {{ page.summary | safe }}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+{% if config.extra.debug %}
+<h1>Debug</h1>
+<pre><code>
+{{ __tera_context }}
+</code></pre>
+{% endif %}
+{% endblock content %}

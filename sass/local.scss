@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   align-items: start;
+  overflow-y: scroll;
 
   h1, h2, h3, h4, h5, h6 {
     color: #FFF;
@@ -14,6 +15,15 @@
   ul {
     // normally 2rem
     padding-left: 1rem;
+  }
+
+  .taxonomies {
+    h1, h2, h3, h4, h5, h6 {
+      text-transform: capitalize;
+    }
+  }
+  .tag {
+    color: #313131;
   }
 }
 
@@ -78,4 +88,11 @@ input#search-box:focus {
 
 .hidden {
   display: none;
+}
+
+.tag {
+  background-color: lightgrey;
+  padding: 0.25em;
+  border-radius: 3px;
+  margin: 0.25em;
 }

@@ -77,7 +77,7 @@ const SearchResults = () => {
       let classes = ['search-results'];
       let query = vnode.attrs.query;
       let results = index.search(query);
-      let resultContent = [m('h1', `Search results for "${query}"`)];
+      let resultContent = [m('h1', `Search results for "${query}"`), m('hr')];
       if (results.length) {
         resultContent.push(...results.map(result =>
           m(ResultEntry, {highlight: query, ...result})));
