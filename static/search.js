@@ -59,11 +59,13 @@ class ResultEntry {
     return m('p', {'class': 'preview'}, preview);
   }
   view(vnode) {
-    let {doc, ref, highlight} = vnode.attrs;
+    let {doc, href, highlight} = vnode.attrs;
     let preview = this.preview(highlight, doc.body);
-    return m('div', {class: 'search-result'}, [
-      m('a', {href: ref}, m('h2', doc.title)),
-      preview,
+    return m('div', {class: 'posts'}, [
+      m('div', {class: 'post on-list'}, [
+        m('h1', {class: 'post-title'}, [m('a', {href: href}, doc.title)]),
+        m('div', {class: 'post-content'}, preview),
+      ]),
     ])
   }
 }

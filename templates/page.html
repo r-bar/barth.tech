@@ -2,23 +2,33 @@
 
 {% block title %}{{ config.title }} - {{ page.title }}{% endblock title %}
 
-{% block sidebar_toc %}
-  <ul class="sidebar-toc">
-    {% for h1 in page.toc %}
-      <li>
-        <a href="{{h1.permalink | safe}}">{{ h1.title }}</a>
-        {% if h1.children %}
-          <ul>
-            {% for h2 in h1.children %}
+{% block content %}
+    <div class="post">
+        {{ post_macros::header(page=page) }}
+        {% if page.toc %}
+          <ul class="toc">
+            {% for h1 in page.toc %}
               <li>
-                <a href="{{h2.permalink | safe}}">{{ h2.title }}</a>
+                <a href="{{h1.permalink | safe}}">{{ h1.title }}</a>
+                {% if h1.children %}
+                  <ul>
+                    {% for h2 in h1.children %}
+                      <li>
+                        <a href="{{h2.permalink | safe}}">{{ h2.title }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </li>
             {% endfor %}
           </ul>
         {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
+        {{ post_macros::content(page=page, summary=false) }}
+        {{ post_macros::earlier_later(page=page) }}
+    </div>
+{% endblock content %}
+
+{% block toc %}
   <div class="spacer"></div>
   <div class="taxonomies">
     {% for taxonomy, values in page.taxonomies %}
@@ -31,12 +41,3 @@
     {% endfor %}
   </div>
 {% endblock sidebar_toc %}
-
-{% block content %}
-<div class="post">
-  <h1 class="post-title">{{ page.title }}</h1>
-  <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
-  {{ page.content | safe }}
-</div>
-<div id="search-target"></div>
-{% endblock content %}

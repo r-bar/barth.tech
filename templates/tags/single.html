@@ -1,0 +1,21 @@
+{% extends "terminimal/templates/tags/single.html" %}
+
+{% block content %}
+  <div class="post">
+    <h1 class="post-title">
+        tag: #{{ term.name }}
+        ({{ term.pages | length }} post{{ term.pages | length | pluralize }})
+    </h1>
+    <ul>
+    {% for page in term.pages %}
+      <li class="post-list">
+        <a href="{{ page.permalink | safe }}">
+          <span class="post-date">{{ page.date }}</span>
+          :: <span class="post-list-title">{{ page.title }}</span>
+        </a>
+        {{ post_macros::tags(page=page, short=true) }}
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+{% endblock content %}

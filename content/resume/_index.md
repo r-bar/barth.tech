@@ -2,6 +2,7 @@
 title = "Resume"
 date = 2020-04-07
 description = "Ryan Barth"
+paginate_by = 10
 +++
 # Work History
 

@@ -2,6 +2,7 @@
 title = "Jack's Instruction Manual"
 date = 2020-11-16
 description = "Jack Barth"
+paginate_by = 10
 +++
 Last Updated: 2020-11-16
 

@@ -11,30 +11,47 @@ highlight_code = true
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = true
 
-theme = "hyde"
+theme = "terminimal"
 
 title = "Ryan Barth"
 
 taxonomies = [
     { name = "tags" },
+    # required for after-dark
+    { name = "catagories" },
 ]
+
+paginate_by = 10
 
 [extra]
 # Put all your custom variables here
 debug = false
-hyde_sticky = false
-#hyde_links = [
-#    {url = "/", name = "Home"},
-#    {url = "/resume", name = "Resume"},
-#    {url = "/blog", name = "Blog Posts"},
-#]
 
 sidebar_links = [
-    {url = "/resume", name = "Resume"},
-    {url = "/blog", name = "Blog Posts"},
-    {url = "https://linkedin.com/in/ryan-barth-tech", name = "LinkedIn"},
-    {url = "https://github.com/r-bar", name = "Github"},
 ]
 
 # enable building a table of contents for pages
 toc_enabled = true
+
+after_dark_title = "Ryan Barth"
+after_dark_menu = [
+    {url = "$BASE_URL", name = "Home"},
+    {url = "$BASE_URL/resume", name = "Resume"},
+    {url = "$BASE_URL/blog", name = "Blog Posts"},
+    {url = "$BASE_URL/tags", name = "Tags"},
+    {url = "https://linkedin.com/in/ryan-barth-tech", name = "LinkedIn"},
+    {url = "https://github.com/r-bar", name = "Github"},
+]
+
+# terminimal
+accent_color = "blue"
+background_color = "dark"
+logo_text = "Ryan Barth"
+menu_items = [
+    {url = "$BASE_URL", name = "Home"},
+    {url = "$BASE_URL/resume", name = "Resume"},
+    {url = "$BASE_URL/blog", name = "Blog Posts"},
+    {url = "$BASE_URL/tags", name = "Tags"},
+    {url = "https://linkedin.com/in/ryan-barth-tech", name = "LinkedIn"},
+    {url = "https://github.com/r-bar", name = "Github"},
+]
