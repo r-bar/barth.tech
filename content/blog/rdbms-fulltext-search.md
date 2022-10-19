@@ -13,6 +13,55 @@ search features using the infrastructure you probably already have.
 
 <!-- more -->
 
+## Why not Lucene?
+
+Modern RDBMS's all come with the basic functions required to create capable
+search indexes. You can begin to iterate on your problem domain without worrying
+about setting up additional infrastructure first. By iterating with the
+resources you already have you will either discover the requirements and index
+design you need from a more full featured solution, or discover you don't need
+it at all.
+
+Managing additional infrastructure and managing the synchronization of data
+between your source of truth and the search service are mandatory additional
+complexity. This level of complexity is non-trivial for a fledgling project when
+you may not even fully understand your problem space. It is more important to
+get a basic solution up and running so you can start getting feedback on your
+solution and additional data points for how to tune your search indices.
+
+## Just running a search service does not solve the problem
+
+Lucene has been THE standard in open source full text search. The services that
+wrap it, Elasticsearch, Apache Solr, and OpenSearch, are powerful tools for
+projects trying to make their data discoverable. However, spinning up additional
+infrastructure and keeping these search indexes in sync with the source of truth
+can add a lot of overhead when you do not need the full breadth of features
+these services provide. As much as the companies behind these products would
+like to tell you otherwise, just adding their search solution to your code base
+does not solve search. They can't. The problem is too big, and they do not
+understand the specifics of your problem domain.
+
+For unsophisticated like indexing a blog article they probably realistically are
+able to provide excelent results with no tuning required, but anything more
+complicated will require knowledge of your problem domain. Let's take reddit, a
+meta blog in it's own right, as an example. There are many things that could
+factor into how likely a user is to be looking for a particular piece of
+content.
+
+A search result may be more likely to be correct if:
+1. It has more total upvotes
+1. It has more total comments
+1. It got more engagement in a shorter period of time
+1. It had higher click through than other posts
+1. The user has seen or engaged (or NOT!) with the post before
+1. The user HAS NOT seen or engaged with the post before
+1. The user is subscribed (or NOT!) to the community the result was posted to
+1. The linked article matches the query
+
+All these factors are likely to be encoded outside of the full text index and
+not understood by a search service without explicit inclusion in the index and
+manually defining a mapping and weights.
+
 ### Design tradeoffs
 
 It is important to understand the basic design space of a given search feature.
@@ -64,69 +113,34 @@ entities within your system. Typically directly exposing the facets as queryable
 fields and searching with high precision or flattening the facets is the easiest
 way to go here.
 
-## Why not Lucene?
-
-Modern RDBMS's all come with the basic functions required to create capable
-search indexes. You can begin to iterate on your problem domain without worrying
-about setting up additional infrastructure first. By iterating with the
-resources you already have you will either discover the requirements and index
-design you need from a more full featured solution, or discover you don't need
-it at all.
-
-Managing additional infrastructure and managing the synchronization of data
-between your source of truth and the search service are mandatory additional
-complexity. This level of complexity is non-trivial for a fledgling project when
-you may not even fully understand your problem space. It is more important to
-get a basic solution up and running so you can start getting feedback on your
-solution and additional data points for how to tune your search indices.
-
-## Just running a search service does not solve the problem
-
-Lucene has been THE standard in open source full text search. The services that
-wrap it, Elasticsearch, Apache Solr, and OpenSearch, are powerful tools for
-projects trying to make their data discoverable. However, spinning up additional
-infrastructure and keeping these search indexes in sync with the source of truth
-can add a lot of overhead when you do not need the full breadth of features
-these services provide. As much as the companies behind these products would
-like to tell you otherwise, just adding their search solution to your code base
-does not solve search. They can't. The problem is too big, and they do not
-understand the specifics of your problem domain.
-
-For unsophisticated like indexing a blog article they probably realistically are
-able to provide excelent results with no tuning required, but anything more
-complicated will require knowledge of your problem domain. Let's take reddit, a
-meta blog in it's own right, as an example. There are many things that could
-factor into how likely a user is to be looking for a particular piece of
-content.
-
-A search result may be more likely to be correct if:
-1. It has more total upvotes
-1. It has more total comments
-1. It got more engagement in a shorter period of time
-1. It had higher click through than other posts
-1. The user has seen or engaged (or NOT!) with the post before
-1. The user HAS NOT seen or engaged with the post before
-1. The user is subscribed (or NOT!) to the community the result was posted to
-1. The linked article matches the query
-
-All these factors are likely to be encoded outside of the full text index and
-not understood by a search service without explicit inclusion in the index and
-manually defining a mapping and weights.
-
 ## RDBMS Index Implementations
 
 Since you are still here, let's get to the how.
 
-### Postgresql
+### Postgresql - pg_trgm
+
+In this section we are going to look at implementing a trigram index. Trigrams
+are great for names, language agnostic search, and handling misspellings well.
+
+First, activate the extension.
+```sql
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+```
 
 Create the text fields to search against. These can be aggregated from multiple
-tables and fields using materialized views.
+tables and fields using materialized views. We will be using an imaginary
+`users` and `addresses` table. In this example we will create 2 indexed fields
+based on the user's full name and the city they live in.
 ```sql
 CREATE MATERIALIZED VIEW users_search
 AS (
 	SELECT
-		users.first_name || COALESCE(' ' || users.middle_name || ' ', ' ') || users.last_name
-			AS full_name,
+		users.id AS user_id,
+		(
+			users.first_name
+			|| COALESCE(' ' || users.middle_name || ' ', ' ')
+			|| users.last_name
+		) AS full_name,
 		addresses.city || ' ' || addresses.state AS location
 	FROM users
 	LEFT JOIN addresses ON users.address_id = addresses.id
@@ -135,6 +149,7 @@ WITH DATA
 ```
 
 Create the FTS indexes.
+
 ```sql
 CREATE INDEX users_full_name_search_fts_idx
 ON users_search
@@ -146,21 +161,27 @@ ON users_search
 USING gin (location gin_trgm_ops);
 ```
 
-> In choosing which index type to use, GiST or GIN, consider these performance differences:
+> In choosing which index type to use, GiST or GIN, consider these performance
+> differences:
 >   * GIN index lookups are about three times faster than GiST
 >   * GIN indexes take about three times longer to build than GiST
->   * GIN indexes are moderately slower to update than GiST indexes, but about 10 times slower if fast-update support was disabled [...]
+>   * GIN indexes are moderately slower to update than GiST indexes, but about
+>     10 times slower if fast-update support was disabled [...]
 >   * GIN indexes are two-to-three times larger than GiST indexes
 
 
-Create a function to keep the materialized view up to date with changes.
+Create a function to keep the materialized view up to date with changes. Note
+that between the use of gin indexing and the automated table refresh on record
+changes adding or changing a user will not be very fast. The assumption here is
+that we will not be adding or changing users very often so sacrifice slower
+updates to get the maximum search performance.
+
 ```sql
 CREATE OR REPLACE FUNCTION refresh_users_search()
 RETURNS TRIGGER LANGUAGE plpgsql
 AS $$
 BEGIN
-REFRESH MATERIALIZED VIEW
-CONCURRENTLY users_search;
+REFRESH MATERIALIZED VIEW CONCURRENTLY users_search;
 RETURN NULL;
 END $$;
 
@@ -169,9 +190,13 @@ AFTER INSERT OR UPDATE OR DELETE OR TRUNCATE
 ON users
 FOR EACH STATEMENT
 EXECUTE PROCEDURE refresh_users_search();
+
+-- optionally add the trigger to the addresses as well
 ```
 
-Sample query
+Sample query merging the scores from querying both the `full_name` and
+`location` indexes.
+
 ```sql
 SELECT
 	users.*,
@@ -187,9 +212,11 @@ In addition to the `similarity()` function shown above the trgm indixes are also
 able to speed up queries that use `LIKE`, `ILIKE`, and `REGEX`.
 
 ### Sqlite
+
 Coming soon (TM)...
 
 ## Conclusion
+
 No one is going to argue that using full text search inside your relational
 database is more powerful or full featured than a dedicated service like
 Elasticsearch. You may eventually have to migrate to a more full fledged
