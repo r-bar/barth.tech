@@ -59,13 +59,11 @@ class ResultEntry {
     return m('p', {'class': 'preview'}, preview);
   }
   view(vnode) {
-    let {doc, href, highlight} = vnode.attrs;
+    let {doc, ref, highlight} = vnode.attrs;
     let preview = this.preview(highlight, doc.body);
-    return m('div', {class: 'posts'}, [
-      m('div', {class: 'post on-list'}, [
-        m('h1', {class: 'post-title'}, [m('a', {href: href}, doc.title)]),
-        m('div', {class: 'post-content'}, preview),
-      ]),
+    return m('div', {class: 'post on-list'}, [
+      m('h1', {class: 'post-title'}, [m('a', {href: ref}, doc.title)]),
+      m('div', {class: 'post-content'}, preview),
     ])
   }
 }
@@ -76,7 +74,6 @@ const SearchResults = () => {
 
   return {
     view: (vnode) => {
-      let classes = ['search-results'];
       let query = vnode.attrs.query;
       let results = index.search(query);
       let resultContent = [m('h1', `Search results for "${query}"`), m('hr')];
@@ -86,7 +83,7 @@ const SearchResults = () => {
       } else {
         resultContent.push(m('p', 'No results found.'));
       }
-      return m('div', {'class': classes.join(' ')}, resultContent);
+      return m('div', {'class': 'search-results posts'}, resultContent);
     }
   }
 }
