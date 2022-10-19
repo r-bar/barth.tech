@@ -4,7 +4,7 @@ date = 2022-10-09
 draft = true
 
 [taxonomies]
-tags = ["web", "search", "postgres"]
+tags = ["web", "search", "postgres", "sqlite"]
 +++
 
 Search is a ubiquitous and expected feature of modern applications. In this
@@ -109,12 +109,101 @@ A search result may be more likely to be correct if:
 1. The user is subscribed (or NOT!) to the community the result was posted to
 1. The linked article matches the query
 
-All these factors are likely to be encoded as structured data outside of the 
-full text index and not understood by a search service without explicit
-inclusion in the index and manually defining a mapping and weights.
+All these factors are likely to be encoded outside of the full text index and
+not understood by a search service without explicit inclusion in the index and
+manually defining a mapping and weights.
 
 ## RDBMS Index Implementations
 
+Since you are still here, let's get to the how.
+
 ### Postgresql
 
+Create the text fields to search against. These can be aggregated from multiple
+tables and fields using materialized views.
+```sql
+CREATE MATERIALIZED VIEW users_search
+AS (
+	SELECT
+		users.first_name || COALESCE(' ' || users.middle_name || ' ', ' ') || users.last_name
+			AS full_name,
+		addresses.city || ' ' || addresses.state AS location
+	FROM users
+	LEFT JOIN addresses ON users.address_id = addresses.id
+)
+WITH DATA
+```
+
+Create the FTS indexes.
+```sql
+CREATE INDEX users_full_name_search_fts_idx
+ON users_search
+USING gin (full_name gin_trgm_ops);
+
+
+CREATE INDEX users_location_search_fts_idx
+ON users_search
+USING gin (location gin_trgm_ops);
+```
+
+> In choosing which index type to use, GiST or GIN, consider these performance differences:
+>   * GIN index lookups are about three times faster than GiST
+>   * GIN indexes take about three times longer to build than GiST
+>   * GIN indexes are moderately slower to update than GiST indexes, but about 10 times slower if fast-update support was disabled [...]
+>   * GIN indexes are two-to-three times larger than GiST indexes
+
+
+Create a function to keep the materialized view up to date with changes.
+```sql
+CREATE OR REPLACE FUNCTION refresh_users_search()
+RETURNS TRIGGER LANGUAGE plpgsql
+AS $$
+BEGIN
+REFRESH MATERIALIZED VIEW
+CONCURRENTLY users_search;
+RETURN NULL;
+END $$;
+
+CREATE TRIGGER refresh_users_search_for_users
+AFTER INSERT OR UPDATE OR DELETE OR TRUNCATE
+ON users
+FOR EACH STATEMENT
+EXECUTE PROCEDURE refresh_users_search();
+```
+
+Sample query
+```sql
+SELECT
+	users.*,
+	similarity(users_search.full_name, :query) + similarity(users_search.location, :query)
+		AS ranking
+FROM users
+LEFT JOIN users_search ON users.id = users_search.user_id
+ORDER BY ranking DESC
+LIMIT 10
+```
+
+In addition to the `similarity()` function shown above the trgm indixes are also
+able to speed up queries that use `LIKE`, `ILIKE`, and `REGEX`.
+
 ### Sqlite
+Coming soon (TM)...
+
+## Conclusion
+No one is going to argue that using full text search inside your relational
+database is more powerful or full featured than a dedicated service like
+Elasticsearch. You may eventually have to migrate to a more full fledged
+solution once you hit the limitations of the tools provided by your database.
+
+Instead the techniques here can be useful for projects that have not yet fully
+fleshed out their requirements and want to get up and running quickly. The
+ceiling on what comes with your database is higher than many people realize. By
+the time you are forced to migrate you will have a far greater understanding of
+your product, users, and search feature requirements so that when you do make
+the investment into a more sophisticated version of your search, you do it
+correctly from the start.
+
+## Additional resources
+* [The State of (Full) Text Search in PostgreSQL 12](https://archive.fosdem.org/2020/schedule/event/postgresql_the_state_of_full_text_search_in_postgresql_12/)
+* [pg_trgm documentation](https://www.postgresql.org/docs/current/pgtrgm.html)
+* [Postgres text search functions documentation](https://www.postgresql.org/docs/15/functions-textsearch.html)
