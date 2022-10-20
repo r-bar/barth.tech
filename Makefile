@@ -4,6 +4,8 @@ SOURCE_FILES = $(wildcard sass/** content/** static/** templates/** themes/** co
 FONTS_URL := "https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
 IMAGE_NAME := registry.barth.tech/library/website
 CONTAINER_RUNTIME ?= docker
+GIT_TAG = $(shell git describe --tags --dirty)
+GIT_SHORT_SHA = $(shell git show-ref HEAD -s --abbrev)
 
 
 .DEFAULT: help
@@ -16,8 +18,9 @@ help: ## Show this help text
 tag: ## Tag a new public version
 	# check if the repo is dirty before tagging
 	if [[ $(shell git status -s | grep -v '^??' | wc -l) -ne 0 ]]; then exit 1; fi
-	git tag $(DATE_VERSION)
-	git push origin $(DATE_VERSION)
+	git tag ${DATE_VERSION}
+	git push origin ${DATE_VERSION}
+	@echo Tagged ${DATE_VERSION}
 
 
 static/vendor/mithril.min.js:
@@ -37,16 +40,16 @@ build: ${SOURCE_FILES} static/vendor/fonts static/vendor/mithril.min.js ## Build
 .PHONY: image
 image: ## Build and tag docker image
 	${CONTAINER_RUNTIME} build . \
-		-t ${IMAGE_NAME}:$(shell git describe --tags --dirty) \
-		-t ${IMAGE_NAME}:$(shell git show-ref HEAD -s --abbrev) \
-		-t ${IMAGE_NAME}:latest
+		-t "${IMAGE_NAME}:${GIT_TAG}" \
+		-t "${IMAGE_NAME}:${GIT_SHORT_SHA}" \
+		-t "${IMAGE_NAME}:latest"
 
 
 .PHONY: publish
 publish: ## Publish the current docker image to the repository
-	${CONTAINER_RUNTIME} push ${IMAGE_NAME}:$(shell git describe --tags --dirty)
-	${CONTAINER_RUNTIME} push ${IMAGE_NAME}:$(shell git show-ref HEAD -s --abbrev)
-	${CONTAINER_RUNTIME} push ${IMAGE_NAME}:latest
+	${CONTAINER_RUNTIME} push "${IMAGE_NAME}:${GIT_TAG}"
+	${CONTAINER_RUNTIME} push "${IMAGE_NAME}:${GIT_SHORT_SHA}"
+	${CONTAINER_RUNTIME} push "${IMAGE_NAME}:latest"
 
 
 clean: ## Clean generated files
