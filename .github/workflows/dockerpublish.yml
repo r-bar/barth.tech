@@ -43,5 +43,5 @@ jobs:
       - name: Set version
         run: |
           sed -ie '0,/tag:/ s/tag: .*/tag: ${{ github.tag }}/' applications/barth-tech/values.yaml
-          git commit -a -m 'Set barth-tech image tag to ${{ github.tag }}'
+          git commit -a -m 'Set barth-tech image tag to ${{ github.ref_name }}'
           git push
