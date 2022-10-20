@@ -26,7 +26,7 @@ jobs:
         run: docker build . --file Dockerfile --tag $IMAGE_ID:latest
 
       - name: Log into registry
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login registry.barth.tech -u ${{ secrets.DOCKER_USER }} --password-stdin
+        run: echo '${{ secrets.DOCKER_PASSWORD }}' | docker login registry.barth.tech -u '${{ secrets.DOCKER_USER }}' --password-stdin
 
       - name: Push image
         run: |
