@@ -23,30 +23,10 @@ jobs:
         run: git submodule update --init --recursive
 
       - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_ID:latest
+        run: make image
 
       - name: Log into registry
         run: echo '${{ secrets.DOCKER_PASSWORD }}' | docker login registry.barth.tech -u '${{ secrets.DOCKER_USER }}' --password-stdin
 
       - name: Push image
-        run: |
-          #SHA=$(git rev-parse --short HEAD)
-          SHA="$(git rev-parse --short HEAD)"
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          echo SHA=$SHA
-
-          docker push $IMAGE_ID:latest
-
-          docker tag $IMAGE_ID:latest $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
-
-          docker tag $IMAGE_ID:latest $IMAGE_ID:$SHA
-          docker push $IMAGE_ID:$SHA
+        run: make publish
