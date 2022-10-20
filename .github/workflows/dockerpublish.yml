@@ -7,6 +7,8 @@ on:
 
 env:
   GIT_REVISION: ${{ github.ref }}
+  REGISTRY: registry.barth.tech
+  IMAGE_NAME: registry.barth.tech/library/website
 
 jobs:
   # Push image to GitHub Packages.
@@ -22,12 +24,15 @@ jobs:
       - name: Build image
         run: make image
 
+      #- name: Log into registry
+      #  uses: docker/login-action@v2
+      #  with:
+      #    registry: registry.barth.tech
+      #    username: "${{ secrets.DOCKER_USER }}"
+      #    password: "${{ secrets.DOCKER_PASSWORD }}"
+
       - name: Log into registry
-        uses: docker/login-action@v2
-        with:
-          registry: registry.barth.tech
-          username: "${{ secrets.DOCKER_USER }}"
-          password: "${{ secrets.DOCKER_PASSWORD }}"
+        run: echo "${{ secrets.DOCKER_USER }}" | docker login $REGISTRY -u ${{ secrets.DOCKER_USER }} --password-stdin
 
       - name: Push image
         run: make publish
