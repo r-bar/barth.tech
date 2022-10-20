@@ -38,7 +38,7 @@ build: ${SOURCE_FILES} static/vendor/fonts static/vendor/mithril.min.js ## Build
 image: ## Build and tag docker image
 	${CONTAINER_RUNTIME} build . \
 		-t ${IMAGE_NAME}:$(shell git describe --tags --dirty) \
-		-t ${IMAGE_NAME}:$(shell git show-ref HEAD --abbrev) \
+		-t ${IMAGE_NAME}:$(shell git show-ref HEAD -s --abbrev) \
 		-t ${IMAGE_NAME}:latest
 
 
