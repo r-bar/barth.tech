@@ -21,18 +21,18 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Log into registry
-        run: echo -n '${{ secrets.DOCKER_PASSWORD }}' | docker login $REGISTRY -u '${{ secrets.DOCKER_USER }}' --password-stdin
-
-      - name: Build image
-        run: make image
-
       #- name: Log into registry
       #  uses: docker/login-action@v2
       #  with:
       #    registry: registry.barth.tech
       #    username: "${{ secrets.DOCKER_USER }}"
       #    password: "${{ secrets.DOCKER_PASSWORD }}"
+
+      - name: Log into registry
+        run: echo -n '${{ secrets.DOCKER_PASSWORD }}' | docker login $REGISTRY -u '${{ secrets.DOCKER_USER }}' --password-stdin
+
+      - name: Build image
+        run: make image
 
       - name: Push image
         run: make publish
