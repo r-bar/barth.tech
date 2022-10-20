@@ -1,0 +1,52 @@
+name: Deploy to dok8s
+
+on:
+  push:
+    tags: ['*']
+
+  # Run tests for any PRs.
+  pull_request:
+
+env:
+  IMAGE_ID: registry.barth.tech/library/barth.tech
+
+jobs:
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  image:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Clone submodules
+        run: git submodule update --init --recursive
+
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_ID:latest
+
+      - name: Log into registry
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login registry.barth.tech -u ${{ secrets.DOCKER_USER }} --password-stdin
+
+      - name: Push image
+        run: |
+          #SHA=$(git rev-parse --short HEAD)
+          SHA="$(git rev-parse --short HEAD)"
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          echo SHA=$SHA
+
+          docker push $IMAGE_ID:latest
+
+          docker tag $IMAGE_ID:latest $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
+          docker tag $IMAGE_ID:latest $IMAGE_ID:$SHA
+          docker push $IMAGE_ID:$SHA
