@@ -41,13 +41,9 @@ image: ## Build and tag docker image
 		-t ${IMAGE_NAME}:$(shell git show-ref --abbrev) \
 		-t ${IMAGE_NAME}:latest
 
-.PHONY: publish
-	${CONTAINER_RUNTIME} push ${IMAGE_NAME}:$(shell git describe --tags --dirty)
-	${CONTAINER_RUNTIME} push ${IMAGE_NAME}:$(shell git show-ref --abbrev)
-
 
 .PHONY: publish
-publish:
+publish: ## Publish the current docker image to the repository
 	${CONTAINER_RUNTIME} push ${IMAGE_NAME}:$(shell git describe --tags --dirty)
 	${CONTAINER_RUNTIME} push ${IMAGE_NAME}:$(shell git show-ref --abbrev)
 	${CONTAINER_RUNTIME} push ${IMAGE_NAME}:latest
