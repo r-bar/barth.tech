@@ -17,10 +17,10 @@ help: ## Show this help text
 
 .PHONY: tag
 tag: ## Tag a new public version
-	@if [[ $(shell git status -s | grep -v '^??' | wc -l) -ne 0 ]]; \
-		echo Please commit any changes before tagging!; \
-		then exit 1; \
-	fi
+	#@if [[ $(shell git status -s | grep -v '^??' | wc -l) -ne 0 ]]; \
+	#  echo Please commit any changes before tagging!; \
+	#  then exit 1; \
+	#fi
 	git tag ${DATE_VERSION}
 	git push origin ${DATE_VERSION}
 	@echo Tagged ${DATE_VERSION}
