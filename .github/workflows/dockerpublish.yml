@@ -38,7 +38,8 @@ jobs:
       - uses: actions/checkout@v3
         with:
           repository: r-bar/dok8s
-          token: "{{ secrets.GH_PERSONAL_ACCESS_TOKEN }}"
+          #token: "{{ secrets.GH_PERSONAL_ACCESS_TOKEN }}"
+          ssh-key: "${{ secrets.DOK8S_SSH_KEY }}"
       - name: Set version
         run: |
           sed -ie '0,/tag:/ s/tag: .*/tag: ${{ github.tag }}/' applications/barth-tech/values.yaml
