@@ -13,22 +13,6 @@ search features using the infrastructure you probably already have.
 
 <!-- more -->
 
-## Why not Lucene?
-
-Modern RDBMS's all come with the basic functions required to create capable
-search indexes. You can begin to iterate on your problem domain without worrying
-about setting up additional infrastructure first. By iterating with the
-resources you already have you will either discover the requirements and index
-design you need from a more full featured solution, or discover you don't need
-it at all.
-
-Managing additional infrastructure and managing the synchronization of data
-between your source of truth and the search service are mandatory additional
-complexity. This level of complexity is non-trivial for a fledgling project when
-you may not even fully understand your problem space. It is more important to
-get a basic solution up and running so you can start getting feedback on your
-solution and additional data points for how to tune your search indices.
-
 ## Just running a search service does not solve the problem
 
 Lucene has been THE standard in open source full text search. The services that
@@ -36,31 +20,32 @@ wrap it, Elasticsearch, Apache Solr, and OpenSearch, are powerful tools for
 projects trying to make their data discoverable. However, spinning up additional
 infrastructure and keeping these search indexes in sync with the source of truth
 can add a lot of overhead when you do not need the full breadth of features
-these services provide. As much as the companies behind these products would
-like to tell you otherwise, just adding their search solution to your code base
-does not solve search. They can't. The problem is too big, and they do not
-understand the specifics of your problem domain.
+these services provide at the start of your project. As much as the companies
+behind these products would like to tell you otherwise, just slapping their
+search solution onto your project does not solve search. They *can't*. The
+problem is too big, and they do not understand the specifics of your problem
+domain.
 
-For unsophisticated like indexing a blog article they probably realistically are
-able to provide excelent results with no tuning required, but anything more
-complicated will require knowledge of your problem domain. Let's take reddit, a
-meta blog in it's own right, as an example. There are many things that could
-factor into how likely a user is to be looking for a particular piece of
-content.
+Ok, for unsophisticated use cases like indexing a blog article they probably
+realistically *are* able to provide excellent results with no tuning required,
+but anything more complicated will require knowledge of your problem domain.
+Let's take a reddit-like a news aggregator site as an example. There are many
+things that could factor into how likely a user is to be looking for a
+particular piece of content.
 
 A search result may be more likely to be correct if:
+1. The linked article's text matches the query
+1. The comments about the article match the query
 1. It has more total upvotes
 1. It has more total comments
 1. It got more engagement in a shorter period of time
 1. It had higher click through than other posts
 1. The user has seen or engaged (or NOT!) with the post before
-1. The user HAS NOT seen or engaged with the post before
 1. The user is subscribed (or NOT!) to the community the result was posted to
-1. The linked article matches the query
 
 All these factors are likely to be encoded outside of the full text index and
 not understood by a search service without explicit inclusion in the index and
-manually defining a mapping and weights.
+manually defining mappings and weights.
 
 ### Design tradeoffs
 
@@ -115,7 +100,7 @@ way to go here.
 
 ## RDBMS Index Implementations
 
-Since you are still here, let's get to the how.
+Since you are still here, let's get to the how!
 
 ### Postgresql - pg_trgm
 
