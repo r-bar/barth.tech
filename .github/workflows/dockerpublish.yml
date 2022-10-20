@@ -48,7 +48,7 @@ jobs:
       - name: Set version
         run: |
           sed -ie '0,/tag:/ s/tag:.*/tag: ${{ github.ref_name }}/' applications/barth-tech/values.yaml
-          git config user.name "rbar/barth.tech actions"
+          git config user.name "${{ github.repository }} actions"
           git config user.email "admin@barth.tech"
           git commit -a -m 'Set barth-tech image tag to ${{ github.ref_name }}'
           git push
