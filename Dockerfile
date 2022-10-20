@@ -1,7 +1,7 @@
-FROM ubuntu:20.04
-ARG ZOLA_VERSION=0.10.1
+FROM ubuntu:22.04
+ARG ZOLA_VERSION=0.16.1
 RUN apt-get update && apt-get install -y \
-  libssl1.1 \
+  libssl3 \
   python3 \
   python3-requests \
   make \

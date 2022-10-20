@@ -2,7 +2,7 @@ DATE_VERSION := $(shell date +%F-%H%M%S)
 MITHRIL_VERSION := v2.0.4
 SOURCE_FILES = $(wildcard sass/** content/** static/** templates/** themes/** config.toml)
 FONTS_URL := "https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
-IMAGE_NAME := barth.tech
+IMAGE_NAME := registry.barth.tech/library/website
 CONTAINER_RUNTIME ?= docker
 
 
