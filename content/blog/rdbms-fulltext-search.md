@@ -1,7 +1,7 @@
 +++
 title = "The basics of full text search"
-date = 2022-10-09
-draft = true
+date = 2022-10-20
+draft = false
 
 [taxonomies]
 tags = ["web", "search", "postgres", "sqlite"]
