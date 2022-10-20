@@ -22,7 +22,7 @@ jobs:
           submodules: recursive
 
       - name: Log into registry
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login $REGISTRY -u ${{ secrets.DOCKER_USER }} --password-stdin
+        run: echo '${{ secrets.DOCKER_PASSWORD }}' | docker login $REGISTRY -u '${{ secrets.DOCKER_USER }}' --password-stdin
 
       - name: Build image
         run: make image
