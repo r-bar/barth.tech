@@ -12,21 +12,12 @@ help: ## Show this help text
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 
-.PHONY: deploy
-deploy: helm-chart/barth-tech/Chart.yaml VERSION ## Publish a new public version
-	git commit -m 'tag version $(shell cat VERSION)' $^
-	git tag $(shell cat VERSION)
-	git push
-	git push origin $(shell cat VERSION)
-
-
-.PHONY: VERSION
-VERSION:
-	echo ${DATE_VERSION} > $@
-
-
-helm-chart/barth-tech/Chart.yaml: VERSION
-	sed -i 's/appVersion: .*/appVersion: $(shell cat VERSION)/' $@
+.PHONY: tag
+tag: ## Tag a new public version
+	# check if the repo is dirty before tagging
+	if [[ $(shell git status -s | grep -v '^??' | wc -l) -ne 0 ]]; then exit 1; fi
+	git tag $(DATE_VERSION)
+	git push origin $(DATE_VERSION)
 
 
 static/vendor/mithril.min.js:
@@ -44,10 +35,18 @@ build: ${SOURCE_FILES} static/vendor/fonts static/vendor/mithril.min.js ## Build
 
 
 .PHONY: image
-image: VERSION ## Build and tag docker image
+image: ## Build and tag docker image
 	${CONTAINER_RUNTIME} build . \
-		-t ${IMAGE_NAME}:$(shell cat VERSION) \
+		-t ${IMAGE_NAME}:$(shell git describe --tags --dirty) \
+		-t ${IMAGE_NAME}:$(shell git show-ref --abbrev) \
 		-t ${IMAGE_NAME}:latest
+
+
+.PHONY: publish
+publish:
+	${CONTAINER_RUNTIME} push ${IMAGE_NAME}:$(shell git describe --tags --dirty)
+	${CONTAINER_RUNTIME} push ${IMAGE_NAME}:$(shell git show-ref --abbrev)
+	${CONTAINER_RUNTIME} push ${IMAGE_NAME}:latest
 
 
 clean: ## Clean generated files
