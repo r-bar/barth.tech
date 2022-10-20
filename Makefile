@@ -4,8 +4,9 @@ SOURCE_FILES = $(wildcard sass/** content/** static/** templates/** themes/** co
 FONTS_URL := "https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
 IMAGE_NAME := registry.barth.tech/library/website
 CONTAINER_RUNTIME ?= docker
+GIT_REVISION ?= HEAD
 GIT_TAG = $(shell git describe --tags --dirty)
-GIT_SHORT_SHA = $(shell git show-ref HEAD -s --abbrev)
+GIT_SHORT_SHA = $(shell git show-ref ${GIT_REVISION} -s --abbrev)
 
 
 .DEFAULT: help
