@@ -18,13 +18,9 @@ input#search-box {
   background-color: rgba(0, 0, 0, 0.0);
   border: 0;
   border-bottom: 1px solid $foreground;
-  //padding: 0.3rem;
-  //line-height: 1.54;
   font-size: 1rem;
   font-family: Hack, DejaVu Sans Mono, Monaco, Consolas, Ubuntu Mono, monospace;
-  //margin-left: 20px;
   max-width: 15em;
-
 }
 input#search-box:focus {
   border-bottom: 1px solid var(--accent);
@@ -41,13 +37,6 @@ input#search-box:focus {
 .spacer {
   flex-grow: 1;
   min-height: 1rem;
-}
-
-// mobile -- breakpoint taken from hyde.css
-@media (max-width: 48em) {
-  .sidebar {
-    align-items: center;
-  }
 }
 
 .hidden {
