@@ -41,10 +41,10 @@ accent_color = "blue"
 background_color = "dark"
 logo_text = "Ryan Barth"
 menu_items = [
-    {url = "$BASE_URL", name = "Home"},
-    {url = "$BASE_URL/resume", name = "Resume"},
-    {url = "$BASE_URL/blog", name = "Blog Posts"},
-    {url = "$BASE_URL/tags", name = "Tags"},
+    {url = "/", name = "Home"},
+    {url = "/resume", name = "Resume"},
+    {url = "/blog", name = "Blog Posts"},
+    {url = "/tags", name = "Tags"},
     {url = "https://linkedin.com/in/ryan-barth-tech", name = "LinkedIn"},
     {url = "https://github.com/r-bar", name = "Github"},
 ]
