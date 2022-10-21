@@ -3,12 +3,15 @@ $foreground: #A9B7C6;
 .content {
   h1, h2, h3, h4, h5, h6 {
     color: var(--accent);
+    display: block;
   }
 }
 
 .header .menu {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 input#search-box {
   color: $foreground;
@@ -19,6 +22,9 @@ input#search-box {
   //line-height: 1.54;
   font-size: 1rem;
   font-family: Hack, DejaVu Sans Mono, Monaco, Consolas, Ubuntu Mono, monospace;
+  //margin-left: 20px;
+  max-width: 15em;
+
 }
 input#search-box:focus {
   border-bottom: 1px solid var(--accent);
