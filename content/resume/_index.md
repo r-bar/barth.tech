@@ -2,12 +2,32 @@
 title = "Resume"
 date = 2020-04-07
 description = "Ryan Barth"
-paginate_by = 10
 +++
 # Work History
 
+## Senior Backend Engineer at Endpoint
+Dec 2020 - Present (Remote)
+
+Built their Notary signing management platform from `git init` to successful
+internal launch to our regional rollout to the expansion of our 3rd party
+integration.
+
+**Projects:**
+* Architected the initial application and data model
+* Created client and internal facing documentation for the API
+* Designed secure document transmission and storage system to enable indexing
+  and storage within external document owner's infrastructure
+
+**Tech Used:**
+* Python
+* FastAPI Web Framework
+* Postgresql
+* Celery
+* AWS Infrastructure
+* ArgoCD
+
 ## Senior Backend Engineer at FanAI
-Mar 2018 - Mar 2020 in Santa Monica, California
+Mar 2018 - June 2020 (Santa Monica, California)
 
 As a Senior Software Engineer at FanAI I architected and implemented ETL
 pipelines and API services for our self service data analytics platform.
@@ -33,7 +53,7 @@ pipelines and API services for our self service data analytics platform.
 * Elasticsearch
 
 ## Software Developer at FAM Brands
-Oct 2017 - Mar 2018 in Los Angeles, California
+Oct 2017 - Mar 2018 (Los Angeles, California)
 
 Originally a 3 month contract from mid September to January. The goal was to get
 their warehouse inventory system to talk to their web store before the holiday
@@ -58,7 +78,7 @@ rush.
 
 
 ## Software Developer at UCode
-Jan 2016 - June 2017 in Manhattan Beach, California
+Jan 2016 - June 2017 (Manhattan Beach, California)
 
 UCode is a code school for kids. I worked to develop the their learning
 management system (LMS) and code exercise tools.
